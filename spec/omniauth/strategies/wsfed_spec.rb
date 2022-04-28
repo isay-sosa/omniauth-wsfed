@@ -5,7 +5,7 @@ require 'spec_helper'
 # need to make changes to the OmniAuth initialization settings, you need a new spec description to
 # re-initialize the test strategy.
 
-describe OmniAuth::Strategies::WSFed, :type => :strategy do
+describe OmniAuth::Strategies::WSFed, type: :strategy do
   include OmniAuth::Test::StrategyTestCase
 
   let(:wsfed_settings) do
@@ -24,14 +24,14 @@ describe OmniAuth::Strategies::WSFed, :type => :strategy do
     context 'no :home_realm_discovery_path' do
 
       it 'should redirect to the IdP/FP issuer URL without [whr] param'  do
-        get '/auth/wsfed'
+        post '/auth/wsfed'
 
         last_response.should be_redirect
         last_response.location.should include wsfed_settings[:issuer]
       end
 
       it 'should redirect to the IdP/FP Issuer URL and maintain [whr] param' do
-        get "auth/wsfed?whr=#{home_realm}"
+        post "auth/wsfed?whr=#{home_realm}"
 
         last_response.should be_redirect
         last_response.location.should include wsfed_settings[:issuer]
@@ -61,14 +61,14 @@ describe OmniAuth::Strategies::WSFed, :type => :strategy do
   context ':home_realm_discovery_path configured' do
 
     it 'should redirect to the local home realm discovery path without [whr] param'  do
-      get '/auth/wsfed'
+      post '/auth/wsfed'
 
       last_response.should be_redirect
       last_response.location.should == wsfed_settings[:home_realm_discovery_path]
     end
 
     it 'should redirect to the IdP/FP Issuer URL and maintain [whr] param' do
-      get "auth/wsfed?whr=#{home_realm}"
+      post "auth/wsfed?whr=#{home_realm}"
 
       last_response.should be_redirect
       last_response.location.should include wsfed_settings[:issuer]
@@ -121,7 +121,7 @@ describe OmniAuth::Strategies::WSFed, :type => :strategy do
   describe 'request_phase: GET /auth/wsfed' do
     context 'without :reply setting' do
       it 'should use the default callback_url'  do
-        get 'auth/wsfed'
+        post 'auth/wsfed'
         last_response.status.should   == 302
         last_response.location.should include("wreply=http%3A%2F%2Fexample.org%2Fauth%2Fwsfed%2Fcallback")
       end
